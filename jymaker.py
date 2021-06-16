@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 import csv
 import json
+import yaml
+import codecs
 import os
 import sys
 
@@ -55,10 +57,28 @@ class Jymaker(QtWidgets.QWidget):
         filename = "C:/Users/User/Documents/Jymaker/json/sample.json"
         with open(filename, "w", encoding="utf_8") as f:
             json.dump(jsdata, f ,indent=4)
+
+        QtWidgets.QMessageBox.about(
+            self,
+            "json file was created.",
+            "json file was created."
+        )
        
+    def callback_create_yaml_button_clicked(self):
+        yamldata = []
+        for row in range(self.listwgt.count()):
+            item = self.listwgt.item(row)
+            yamldata.append(item.text())
 
+        filename = "C:/Users/User/Documents/Jymaker/yml/sample.yml"
+        with codecs.open(filename, 'w', 'utf-8') as f:
+            yaml.dump(yamldata, f, encoding='utf-8', allow_unicode=True)
 
-
+        QtWidgets.QMessageBox.about(
+            self,
+            "Yaml file was created.",
+            "Yaml file was created."
+        )
     
     def build_ui(self):
         self.line_edit = QtWidgets.QLineEdit()
@@ -67,6 +87,7 @@ class Jymaker(QtWidgets.QWidget):
         self.line.setFrameStyle(QtWidgets.QFrame.HLine | QtWidgets.QFrame.Sunken)
         self.listwgt = QtWidgets.QListWidget()
         self.create_file_button = QtWidgets.QPushButton("JSON")
+        self.create_yaml_button = QtWidgets.QPushButton("YAML")
         
         form_layout = QtWidgets.QFormLayout()
         form_layout.addRow("CSV File", self.line_edit)
@@ -74,12 +95,14 @@ class Jymaker(QtWidgets.QWidget):
         form_layout.addRow(self.line)
         form_layout.addRow("File", self.listwgt)
         form_layout.addRow(self.create_file_button)
+        form_layout.addRow(self.create_yaml_button)
         self.setLayout(form_layout)
     
     def connect_signal_slot(self):
         self.line_edit.editingFinished.connect(self.callback_line_edit_editingFinished)
         self.file_dialog_button.clicked.connect(self.callback_file_dialog_button_clicked)
         self.create_file_button.clicked.connect(self.callback_create_file_button_clicked)
+        self.create_yaml_button.clicked.connect(self.callback_create_yaml_button_clicked)
 
     def load_csv(self, file):
         json_list =[]
@@ -100,4 +123,4 @@ if __name__ == '__main__':
     sys.exit(app.exec_())
 
 
-    #Yml
+    
